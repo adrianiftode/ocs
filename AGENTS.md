@@ -94,7 +94,7 @@ When asked to give sessions meaningful titles:
    **same language the user used** for that session (English for English
    threads, Romanian for Romanian ones). Prefer the shape
    `Area: action & outcome`, e.g. `Plex: fix missing movie metadata`,
-   `fidelis-react: add CI + coverage`.
+   `webapp: add CI + coverage`.
 5. **Apply, then verify**
    ```sh
    ocs rename <id> "Chosen title" --dry-run   # preview
