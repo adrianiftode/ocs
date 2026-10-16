@@ -26,7 +26,7 @@ classifiers = [
 ocs = "ocs:main"
 
 [project.urls]
-Homepage = "https://github.com/OWNER/ocs"
+Homepage = "https://github.com/adrianiftode/ocs"
 
 [tool.setuptools]
 py-modules = ["ocs"]

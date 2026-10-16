@@ -31,7 +31,7 @@ there is no built-in way to:
 Run it straight from a clone (no install):
 
 ```sh
-git clone https://github.com/OWNER/ocs
+git clone https://github.com/adrianiftode/ocs.git
 cd ocs
 python ocs.py --help
 ```
