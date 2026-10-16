@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# ocs launcher for Linux / macOS / Git Bash / WSL
+set -euo pipefail
+
+dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+# Pick the first interpreter that actually runs (skips the Windows Store
+# "python" stub, which exists on PATH but exits non-zero).
+runner=()
+if [ -n "${PYTHON:-}" ]; then
+  runner=("$PYTHON")
+else
+  for c in python3 python; do
+    if command -v "$c" >/dev/null 2>&1 && "$c" -c "import sys" >/dev/null 2>&1; then
+      runner=("$c")
+      break
+    fi
+  done
+  if [ ${#runner[@]} -eq 0 ] && command -v py >/dev/null 2>&1 && py -3 -c "import sys" >/dev/null 2>&1; then
+    runner=(py -3)
+  fi
+fi
+
+if [ ${#runner[@]} -eq 0 ]; then
+  echo "ocs: error: no working python interpreter found (set \$PYTHON)" >&2
+  exit 1
+fi
+
+exec "${runner[@]}" "$dir/ocs.py" "$@"
