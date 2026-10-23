@@ -23,7 +23,7 @@ there is no built-in way to:
 ## Requirements
 
 - **Python 3.8 or newer** (standard library only — no dependencies).
-- The `opencode` CLI on `PATH` **only for `ocs move` and `ocs export`**; every
+- The `opencode` CLI on `PATH` **only for `ocs move`, `ocs export` and `ocs import`**; every
   other command talks to the database directly.
 
 ## Installation
@@ -191,13 +191,15 @@ ocs move ses_0123456789abcdef --to ~/code/app --yes   # skip confirmation
 
 The target directory must already exist. Restart opencode afterwards.
 
-### Backups and export
+### Backups, export and import
 
 ```sh
 ocs backup                        # -> <temp>/ocs-backups/opencode-<timestamp>.db
 ocs backup -o ~/backups/opencode.db
 ocs export ses_0123456789abcdef                 # -> ses_0123456789abcdef.json
 ocs export ses_0123456789abcdef --stdout        # pipe it somewhere
+ocs import exported-session.json                # import from current directory
+ocs import exported-session.json --to ~/code/app
 ```
 
 `backup` uses SQLite's online backup API, so it is safe while opencode is

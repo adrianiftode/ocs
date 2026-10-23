@@ -832,6 +832,28 @@ def cmd_export(args, db: Path, con):
     print(f"exported {args.session} -> {dest} ({len(raw)} bytes)")
 
 
+def cmd_import(args, db: Path, con):
+    exe = require_opencode()
+    src = Path(args.file).expanduser()
+    if not src.exists():
+        die(f"file not found: {src}")
+    target = Path(args.to).expanduser() if getattr(args, "to", None) else Path.cwd()
+    if not target.exists():
+        die(f"target directory does not exist: {target}")
+    res = subprocess.run(
+        _opencode_argv(exe, ["import", str(src)]),
+        cwd=str(target),
+        capture_output=True,
+        text=True,
+    )
+    if res.returncode != 0:
+        die(f"`opencode import` failed: {(res.stderr or '').strip() or res.returncode}")
+    out = (res.stdout or "").strip()
+    if out:
+        print(out)
+    print("restart opencode to refresh its session list.")
+
+
 def cmd_move(args, db: Path, con):
     exe = require_opencode()
     target = Path(args.to).expanduser()
@@ -996,6 +1018,12 @@ def build_parser() -> argparse.ArgumentParser:
     se.add_argument("-o", "--out", help="output file (default: <session-id>.json)")
     se.add_argument("--stdout", action="store_true", help="write to stdout instead")
     se.set_defaults(func=cmd_export)
+
+    # import -------------------------------------------------------------
+    si = sub.add_parser("import", help="import a session from JSON via the opencode CLI")
+    si.add_argument("file", help="JSON file exported by opencode/ocs")
+    si.add_argument("--to", help="target project directory (default: current directory)")
+    si.set_defaults(func=cmd_import)
 
     # move ---------------------------------------------------------------
     sm = sub.add_parser("move", help="relocate a session to another project directory")
